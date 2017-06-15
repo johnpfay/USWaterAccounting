@@ -54,21 +54,25 @@ for url in (roURL, prURL, etURL, smURL):
     urllib.urlcleanup()
     print "....complete"
     
-##Export as table of x,y, et
-#Create arrays of lons and lats
+#Write array values as X,Y table
+#Create lons and lats array
 lons = dataDict["lons"]
 lats = dataDict["lats"]
-#Create the file
-outFile = open("../Data/Year2000.csv",'wt')
+#Export as table of x,y, et
+outFile = open("..\Data\Year{}.csv".format(year),'wt')
 #Write headers
 outFile.write("Longitude,Latitude,Runoff,Precip,ET,SoilMoisture\n")
-#Loop through X and Y records and build output table
 for x in xrange(len(lons)):
     for y in xrange(len(lats)):
-        ro = dataDict["total_runoff"][y,x]
-        pr = dataDict["pr"][y,x]
-        et = dataDict["et"][y,x]
-        smc = dataDict["smc"][y,x]
-        outStr = "{},{},{},{},{},{}\n".format(lons[x],lats[y],ro,pr,et,smc)
+        ro = dataDict['total_runoff'][y,x]
+        #Check if data is in the cell, skip to next if not
+        if type(ro) is np.ma.core.MaskedConstant:
+            continue
+        pr = dataDict['pr'][y,x]
+        et = dataDict['et'][y,x]
+        smc = dataDict['smc'][y,x]
+        lon = lons[x]
+        lat = lats[y]
+        outStr = "{},{},{},{},{},{}\n".format(lon,lat,ro,pr,et,smc)
         outFile.write(outStr)
 outFile.close()
