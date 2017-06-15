@@ -54,28 +54,21 @@ for url in (roURL, prURL, etURL, smURL):
     urllib.urlcleanup()
     print "....complete"
     
-###Combine the parameter arrays into a single array
-##params = dataDict.keys()
-##params.remove("lats")
-##params.remove("lons")
-##num_params = len(params)
-##npAll = np.empty((num_params,222,462))
-##for param in params:
-##    x = params.index(param)
-##    npAll[x,:,:] = np.asarray(dataDict[param])
-
-#Write array values as X,Y table
-#Export as table of x,y, et
-outFile = open("Data/Year2000.csv",'wt')
+##Export as table of x,y, et
+#Create arrays of lons and lats
+lons = dataDict["lons"]
+lats = dataDict["lats"]
+#Create the file
+outFile = open("../Data/Year2000.csv",'wt')
 #Write headers
 outFile.write("Longitude,Latitude,Runoff,Precip,ET,SoilMoisture\n")
+#Loop through X and Y records and build output table
 for x in xrange(len(lons)):
     for y in xrange(len(lats)):
-        lon = dataDict["lons"][x]
-        lat = dataDict["lats"][y]
         ro = dataDict["total_runoff"][y,x]
         pr = dataDict["pr"][y,x]
         et = dataDict["et"][y,x]
         smc = dataDict["smc"][y,x]
         outStr = "{},{},{},{},{},{}\n".format(lons[x],lats[y],ro,pr,et,smc)
+        outFile.write(outStr)
 outFile.close()
