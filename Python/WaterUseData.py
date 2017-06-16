@@ -23,6 +23,10 @@ prURL = baseURL2 + "conus_c5.ccsm4_rcp26_r1i1p1.monthly.pr.{}.nc".format(year)
 etURL = baseURL + "conus_c5.ccsm4_rcp26_r1i1p1.monthly.et.{}.nc".format(year)
 smURL = baseURL + "conus_c5.ccsm4_rcp26_r1i1p1.monthly.smc.{}.nc".format(year)
 
+#These lines fix an issue with slow network connections
+import socket
+socket.setdefaulttimeout(30)
+
 #Loop through each file and create an annual sum array; add it to a dictionary
 dataDict = {}
 for url in (roURL, prURL, etURL, smURL):
