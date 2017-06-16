@@ -1,5 +1,4 @@
 #AssignFIPSArcPy.py
-#
 #Assigns the county FIPS code to each XY record in a csv file
 
 import sys, os, csv
@@ -24,16 +23,17 @@ xyFeatureClass = arcpy.CopyFeatures_management(xyEventLayer,"in_memory/XYFeature
 outJoinFC = "in_memory/JoinFC"
 joinFC = arcpy.SpatialJoin_analysis(xyFeatureClass,countyFC,outJoinFC)
 
-#Convert table to numpy array
-np1 = arcpy.da.TableToNumPyArray(joinFC,'*')
-
-print np1.dtype.names
+#Convert table to numpy array (Set null values to -1)
+nullDict = {'GEOID':-1,'STATEFP':-1}
+np1 = arcpy.da.TableToNumPyArray(joinFC,['GEOID','STATEFP'],null_value=nullDict)
 
 #Combine the GEOID and STATEFP into a 2d array
 npX = np.vstack([np1["GEOID"], np1["STATEFP"]])
 
 #Write to a file
-strHeader = "COFIPS,STATEFIPS"
-np.savetxt("../Data/FIPS.csv",npX,delimiter=',',header=strHeader,fmt='%s')
+np.savetxt("../Data/FIPS.csv",
+           npX.T,delimiter=',',
+           fmt='%s',
+           header=u"COFIPS, STATEFIPS"))
 
 np0 = np.genfromtxt(csvFile,delimiter=",",skip_header=True)
