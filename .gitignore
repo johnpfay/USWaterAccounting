@@ -102,4 +102,5 @@ ENV/
 Data/Year2000.csv
 
 #Data files
-Data/*
+Data/cb*.*
+Data/Join*.*
