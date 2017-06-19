@@ -34,6 +34,6 @@ npX = np.vstack([np1["GEOID"], np1["STATEFP"]])
 np.savetxt("../Data/FIPS.csv",
            npX.T,delimiter=',',
            fmt='%s',
-           header=u"COFIPS, STATEFIPS"))
+           header=u"COFIPS,STATEFIPS"))
 
 np0 = np.genfromtxt(csvFile,delimiter=",",skip_header=True)
