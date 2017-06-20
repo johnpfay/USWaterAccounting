@@ -10,7 +10,7 @@ from shapely.geometry import Point, mapping,shape
 dataDir = "..\\..\\Data"
 countyFN = dataDir + os.sep + "cb_2016_us_county_500k.shp"
 outFC = dataDir + os.sep + "mergedfoo.csv"
-df=pd.read_csv(dataDir + os.sep + "HydroData.csv",index_col=None,nrows=2000) 
+df=pd.read_csv(dataDir + os.sep + "HydroData.csv",index_col=None)#,nrows=2000) 
 
 df['geometry'] = df.apply(lambda z: Point(z.LONGITUDE, z.LATITUDE), axis=1)
 PointsGeodataframe = gpd.GeoDataFrame(df)
@@ -18,4 +18,4 @@ PolygonsGeodataframe = gpd.GeoDataFrame.from_file(countyFN)
 PointsGeodataframe.crs = PolygonsGeodataframe.crs
 merged=sjoin(PointsGeodataframe, PolygonsGeodataframe, how='left')
 merged.drop(merged.columns[[9,10,11,12,13,17]],axis=1,inplace=True)
-merged.to_csv(outFC,index=None)
+merged.to_csv(outFC,index=None,encoding ='utf8')
