@@ -15,6 +15,9 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
+#Output file
+outFN = "../Data/UseData.csv"
+
 #Functions
 def fix2000(df):
     '''Renames columns to match 2010 use table'''
@@ -34,8 +37,7 @@ def fix2000(df):
     #Update column names
     df.columns = newList                  
     #Insert YEAR column
-    df.insert(4,"YEAR",year)
-    df["YEAR"] = 2005
+    df.insert(4,"YEAR",2000)
     return df
 
 def fix2005(df):
@@ -56,8 +58,7 @@ def fix2005(df):
     #Update column names
     df.columns = newList                  
     #Insert YEAR column
-    df.insert(4,"YEAR",year)
-    df["YEAR"] = 2005
+    df.insert(4,"YEAR",2005)
     return df
 
 #Create a master data frame from the yearly file/url
@@ -86,7 +87,7 @@ print "Merging tables..."
 df = pd.concat([df00,df05,df10])
 
 #Save file
-df.to_csv("Data/UseData.csv",columns=df10.columns,index_label="KEY")
+df.to_csv(outFN,columns=df10.columns,index_label="KEY")
 
 
 #Summarize data by state
