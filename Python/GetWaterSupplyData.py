@@ -37,7 +37,7 @@ import matplotlib
 #Grab the FIPS data and create a dataframe from it
 print "Getting record FIPS data"
 fipsURL = "https://raw.githubusercontent.com/johnpfay/USWaterAccounting/VersionZero/Data/FIPS.csv"
-dfFIPS = pd.read_csv(fipsURL)
+dfFIPS = pd.read_csv(fipsURL,dtype=np.str)
 
 #Initialize the output file and write the header line
 print "Initializing the output file"
@@ -107,8 +107,8 @@ for year in (2000,2005,2010):
             if type(ro) is np.ma.core.MaskedConstant:
                 continue
             #Get the FIPS codes
-            coFips = dfFIPS['COFIPS'][idxFIPS]
-            stFips = dfFIPS['STATEFIPS'][idxFIPS]
+            coFips = dfFIPS['COFIPS'][idxFIPS].zfill(5)
+            stFips = dfFIPS['STATEFIPS'][idxFIPS].zfill(2)
             idxFIPS += 1
             #Get the other values
             pr = dataDict['pr'][y,x]
