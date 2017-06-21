@@ -102,6 +102,7 @@ ENV/
 Data/Year2000.csv
 
 #Data files
+Data/cb*.*
 Data/Join*.*
 Scratch/
 Data/schema.ini
