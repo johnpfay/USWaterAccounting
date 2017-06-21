@@ -97,7 +97,17 @@ df['FIPS'] = df['FIPS'].apply(lambda x: str(x).zfill(5))
 #Save file
 df.to_csv(outFN,columns=df10.columns,index_label="KEY")
 
+#Pivot on sector totals, by year
+wdNames = ['YEAR','STATE','Public','Domestic','Industry','Irrigation','Livestock','Aquaculture','Mining','Thermo','zTOTAL']
+wdFields = ['YEAR','STATE','PS-WFrTo','DO-WFrTo','IN-WFrTo','IR-WFrTo','LI-WFrTo','AQ-WFrTo','MI-WFrTo','PT-WFrTo','TO-WFrTo']
+#df2000 = dfUsage[dfUsage.YEAR == 2000]
+dfWithdrawals = df[wdFields]
+dfWithdrawals.columns = wdNames
+pv = dfWithdrawals[wdNames].pivot_table(index=('STATE','YEAR'),values=wdNames,aggfunc=np.sum).T
+pv['NC'].to_csv("NC_usage.csv",index=True)
 
-#Summarize data by state
-#grpState =  df[['STATE','TP-TotPop','PS-WFrTo']].groupby(df['STATE'])
-#dfState = grpState.sum()
+pv2000 = dfWithdrawals[wdNames].pivot_table(index=('STATE'),values=wdNames,aggfunc=np.sum).T
+pv2000.to_csv("../Data/Usage2000.csv",index=True)
+#Pivot values on year data by year and state
+#pt = dfUsage.pivot_table(values='TP-TotPop',index='STATEFIPS',columns='YEAR',aggfunc=np.sum)
+#pt.to_csv(outCSV)
