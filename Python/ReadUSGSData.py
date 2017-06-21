@@ -66,25 +66,33 @@ theBaseURL = 'http://water.usgs.gov/watuse/data/{0}/usco{0}.txt' #Use format to 
 #Initialize list of year data frames
 dfs = []
 
+#Column data type dictionary (avoids converting FIPS to numeric types)
+formatDict = {'STATEFIPS':str,'COUNTYFIPS':str,'FIPS':str}
+
 #Year 2000
 print "Getting year 2000 data"
-df00 = pd.read_table(theBaseURL.format(2000))
+df00 = pd.read_table(theBaseURL.format(2000),dtype=formatDict)
 fix2000(df00)
 
 #Year 2005
 print "Getting year 2005 data"
-df05 = pd.read_table(theBaseURL.format(2005))
+df05 = pd.read_table(theBaseURL.format(2005,dtype=formatDict))
 df05.drop(df05.columns.values[-1],axis=1,inplace=True)
 fix2005(df05)
 
 #Year 2010
 print "Getting year 2010 data"
-df10 = pd.read_table(theBaseURL.format(2010))
+df10 = pd.read_table(theBaseURL.format(2010),dtype=formatDict)
 df10.drop(df10.columns.values[-1],axis=1,inplace=True)
 
 #Merge tables
 print "Merging tables..."
 df = pd.concat([df00,df05,df10])
+
+#Fix FIPS columns
+df['STATEFIPS'] = df['STATEFIPS'].apply(lambda x: str(x).zfill(2))
+df['COUNTYFIPS'] = df['COUNTYFIPS'].apply(lambda x: str(x).zfill(3))
+df['FIPS'] = df['FIPS'].apply(lambda x: str(x).zfill(5))
 
 #Save file
 df.to_csv(outFN,columns=df10.columns,index_label="KEY")
