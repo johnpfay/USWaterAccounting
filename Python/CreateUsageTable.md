@@ -138,6 +138,12 @@ dfUsage.columns = useNames
 
 
 ```python
+#Fix FIPS column
+dfUsage['FIPS'] = df['FIPS'].apply(lambda x: str(x).zfill(5))
+```
+
+
+```python
 #Save as a CSV file
 dfUsage.to_csv(outFN,index_label="KEY")
 ```
