@@ -32,17 +32,13 @@ import sys, os, glob, time, datetime, urllib
 import numpy as np
 import pandas as pd
 import netCDF4
-import matplotlib
 
-#Grab the FIPS data and create a dataframe from it
-print "Getting record FIPS data"
-fipsURL = "https://raw.githubusercontent.com/johnpfay/USWaterAccounting/VersionZero/Data/FIPS.csv"
-dfFIPS = pd.read_csv(fipsURL,dtype=np.str)
+#Get the FIPS filename and set the output filename
+fipsFN = '../Data/FIPS.csv'
+outFN = '../Data/SupplyData.csv'
 
-#Initialize the output file and write the header line
-print "Initializing the output file"
-outFile = open("..\Data\HydroData.csv",'wt')
-outFile.write("YEAR,LONGITUDE,LATITUDE,COFIPS,STFIPS,RUNOFF,PRECIP,ET,SME\n")
+#Create a dataframe of FIPS codes to join
+dfFIPS = pd.read_csv(fipsFN,dtype=np.str)
 
 #Set the year to process
 for year in (2000,2005,2010):
@@ -61,7 +57,6 @@ for year in (2000,2005,2010):
     socket.setdefaulttimeout(30)
 
     #Loop through each file and create an annual sum array; add it to a dictionary
-    dataDict = {}
     for url in (roURL, prURL, etURL, smURL):
         print "...downloading data from " + url
         #Retrieve the data file from the ftp server
@@ -70,17 +65,18 @@ for year in (2000,2005,2010):
         #Convert to netCDF object
         nc = netCDF4.Dataset("tmpData.nc",mode='r')
         
-        #Add the lats and lons array to the dictionary
-        dataDict["lats"] = nc.variables['latitude'][:]
-        dataDict["lons"] = nc.variables['longitude'][:]
-            
         #Get the parameter name and its values
         param_name = nc.variables.keys()[-1]
         param_vals = nc.variables.values()[-1]
         
-        #Collapse the monthly values into a single array
-        dataDict[param_name] = param_vals[:,:,:].sum(axis=0)
+        #Collapse the monthly values into a single 3d data frame
+        dfParam = pd.DataFrame(param_vals[:,:,:].sum(axis=0))
         
+        #Create latitude and longitude arrays (for the first element only)
+        if url == roURL:
+            dfLats = pd.DataFrame(nc.variables['latitude'][:])
+            dfLons = pd.DataFrame(nc.variables['longitude'][:])
+            
         #Close the nc object
         nc.close()
         
@@ -90,34 +86,45 @@ for year in (2000,2005,2010):
         #Update
         urllib.urlcleanup()
         print "....complete"
-        
-    #Write array values as X,Y table
-    #Create lons and lats array
-    lons = dataDict["lons"]
-    lats = dataDict["lats"]
 
-    #Initialize the index to retrieve FIPS codes
-    idxFIPS = 0
+        #Melt the data into a 3 column, 2d data frame
+        dfParam.columns = dfLons[0].values.tolist() #Set column names to longitudes
+        dfParam['LAT'] = dfLats[0].values.tolist()  #Add column of longitudes
+        df = pd.melt(dfParam,id_vars=['LAT'],var_name='LON',value_name=param_name)
 
-    for x in xrange(len(lons)):
-        for y in xrange(len(lats)):
-            #Get the runoff values, determine if it's masked or not
-            ro = dataDict['total_runoff'][y,x]
-            #Check if data is in the cell, skip to next if not
-            if type(ro) is np.ma.core.MaskedConstant:
-                continue
-            #Get the FIPS codes
-            coFips = dfFIPS['COFIPS'][idxFIPS].zfill(5)
-            stFips = dfFIPS['STATEFIPS'][idxFIPS].zfill(2)
-            idxFIPS += 1
-            #Get the other values
-            pr = dataDict['pr'][y,x]
-            et = dataDict['et'][y,x]
-            smc = dataDict['smc'][y,x]
-            lon = lons[x]
-            lat = lats[y]
-            #Generate the output string and write it
-            outStr = "{},{},{},{},{},{},{},{},{}\n".format(year,lon,lat,coFips,stFips,ro,pr,et,smc)
-            outFile.write(outStr)
-        
-outFile.close()
+        #Append to dataframe, if not the first element
+        if url == roURL:
+            #Copy to the year dataframe
+            dfYear = df.copy(deep=True)
+            #Append fips values from FIPS dataframe
+            dfYear['FIPS'] = dfFIPS.COFIPS
+        else:
+            #Add column to the year data frame
+            dfYear[param_name] = df[param_name]
+            
+    #Add year to the master data frame
+    dfYear.insert(1,'YEAR',year)
+
+    #Append the year dataframe to the output dataframe, if not the first
+    if year == 2000:
+        dfAllYears = dfYear.copy(deep=True)
+    else:
+        dfAllYears = dfAllYears.append(dfYear)
+
+#Remove records with no data (usually ones outside of US)
+dfAllYears.dropna(inplace=True)
+
+#Remove records with no FIPS code (-1)
+dfAllYears = dfAllYears[dfAllYears.FIPS != "-1"]
+
+#Drop lat and lon columns
+dfAllYears.drop((['LAT','LON']),axis=1,inplace=True)
+
+#Fix FIPS values to have leading zeros where appropriate
+dfAllYears['FIPS'] = dfAllYears['FIPS'].apply(lambda x: str(x).zfill(5))
+
+#Group data by county, summing the parameters
+dfCounty = dfAllYears.groupby(('YEAR','FIPS')).sum()
+
+#Write to file
+dfCounty.to_csv(outFN)
