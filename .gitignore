@@ -100,11 +100,14 @@ ENV/
 # mypy
 .mypy_cache/
 
+# R
+R/.Rproj.user/*
 
 #Data files
 Data/Year2000.csv
 Data/cb_2016_us_state_5m.*
 Data/cb_2016_us_county_5m.*
 Data/CountyHUC8.*
+Data/Proprietary/*
 Scratch/
 *.lock
