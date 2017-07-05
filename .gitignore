@@ -103,4 +103,8 @@ ENV/
 
 #Data files
 Data/Year2000.csv
+Data/cb_2016_us_state_5m.*
+Data/cb_2016_us_county_5m.*
+Data/CountyHUC8.*
 Scratch/
+*.lock
