@@ -1,0 +1,19 @@
+#My files
+
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+
+# virtualenv
+.venv
+venv/
+ENV/
+
+# Rworkspace intermediates
+Rworkspace/.Rhistory
+Rworkspace/.Rproj.user/*
+R/.Rproj*
+
+# Scratch
+scratch/*
