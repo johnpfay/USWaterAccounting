@@ -11,7 +11,7 @@ Budget data are comprised of elements of annual water **supply** and annual wate
 
   - *WaterUseData.py:* 
 
-    - Downloads monthly runoff (total_runoff), precipitation (pr), evapotranspiration (et), and soil moisture content (smc) data, in NetCDF format, from a central data repository ([link](ftp://gdo-dcp.ucllnl.org/pub/dcp/archive/cmip5/hydro/BCSD_mon_VIC_nc/ccsm4_rcp26_r1i1p1/)) for a given sample year (2000, 2005, and 2010). 
+    - Downloads monthly runoff (total_runoff), precipitation (pr), evapotranspiration (et), and soil moisture content (smc) data, in NetCDF format, from a central data repository ([link](http://bit.ly/2vjRfbv)) for a given sample year (2000, 2005, and 2010). 
     - Extracts the monthly data from the downloaded NetCDF files into 4-dimensional NumPy arrays (time, parameter value, latitude, longitude).
     - Aggregates the time dimension (months) into annual sums, resulting in a 3-dimensional array for each parameter, i.e. a single annual value for each 1/8th degree coordinate pair. 
 
