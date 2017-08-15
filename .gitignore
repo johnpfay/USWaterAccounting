@@ -18,7 +18,5 @@ R/.Rproj*
 
 # Scratch
 scratch/*
-Data/UsageDataTidy.csv
-Data/BalanceSheet.xlsx
-Data/WaterBalanceData.csv
-Data/WaterByCounty.csv
+
+
