@@ -1,8 +1,17 @@
-### Overview of iPython notebooks
+### Overview of IPython notebooks
 
-These iPython notebooks are developed to run in Python 2.7 using the Jupyter notebooks module. To install Juptyer notebooks, open a DOS command line in the Python scripts folder and run the following command:
+These IPython notebooks are developed to run in Python 2.7 using the Jupyter notebooks module. To install Jupyter notebooks:
 
-`pip install jupyter`
+* Download and install the Visual C++ Compiler for Python: 
+
+  * Download page: https://www.microsoft.com/en-us/download/details.aspx?id=44266
+  * Direct download link: https://download.microsoft.com/download/7/9/6/796EF2E4-801B-4FC4-AB28-B59FBF6D907B/VCForPython27.msi
+
+* Open a DOS command line in the Python scripts folder and run the following command:
+
+  `pip install jupyter`
+
+
 
 Once it's installed, you should be able to double click the Jupyter shortcut located in the Python folder of this repository. If the shortcut is unable to locate the source, open the shortcut properties and check the path to your Python installation. 
 
@@ -12,7 +21,7 @@ Once it's installed, you should be able to double click the Jupyter shortcut loc
 
   ​
 
-* <u>CreastSupplyTable.ipynb</u>
+* <u>CreateSupplyTable.ipynb</u>
 
   Pulls hydrologic data (precipitation, evapotranspiration, soil moisture content, and runoff) for 2000/2005/2010 from a climate modeling repository. Assigns county FIPS codes to each data point, and then spatially aggregates the data by county across the US to generate a table of county water supply for each year. This script generates two outputs written to the Data folder: The SupplyTableTidy.csv lists 
 
