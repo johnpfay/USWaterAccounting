@@ -35,7 +35,7 @@ The USGS and the accountants continue to discuss the best format of the accounti
 
 ## Deliverables
 
-All code is written in Python and are available as standalone Python scripts and/or interactive Python (i.e, IPython) notebooks hosted on GitHub:<https://github.com/johnpfay/USWaterAccounting>. Each script/notebook is fully documented and requires no proprietary software. These scripts, however, do require some 3rd party open source packages to be installed prior to execution. 
+All code is written in Python (version 2.7) and are available as standalone Python scripts and/or interactive Python (i.e, IPython) notebooks hosted on GitHub:<https://github.com/johnpfay/USWaterAccounting>. Each script/notebook is fully documented and requires no proprietary software. These scripts do, however,  require some 3rd party open-source packages to be installed prior to execution.
 
 The IPython notebooks and the Python stand-alone scripts are somewhat redundant. The former is useful for walking through the individual scripting workflows to better understand the logic of the process. These notebooks, however, are not well suited to iterating (e.g. over all states), and so for batch running the analysis for all dates and for all years, we've also provided stand-alone Python scripts. 
 
@@ -43,4 +43,4 @@ The IPython notebooks and the Python stand-alone scripts are somewhat redundant.
 
 IPython Notebooks provide 
 
-* `RetrieveStateUsageData` - This script downloads state water use data for the years 2000, 2005, and 2010 from the National Water Information System server, and synthesizes them into 
+* `RetrieveStateUsageData.ipynb` - This notebook downloads water use data for a user specified state and year from the National Water Information System server, and translates these data into physical supply and use table (PSUT), using a preformatted PSUT template and value mapping table. 
