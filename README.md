@@ -51,6 +51,12 @@ IPython Notebooks show code along with formatted text in a readable and interact
 
 ### Supplemental Data Files
 
+These files are required to run the scripts. If kept in their original locations in the project workspace, the scripts should run as is; otherwise, the scripts should be edited to reflect new filename and/or locations. 
+
 * `Data\Templates\StatePSUT_Template.xlsx` - This is the templates used to create all the statewide PSUT tables. This table can be reformatted any way with the important caveat that the `StatePSUTLookup.csv` file also be updates so that data values get mapped onto the correct cells. 
 * `Data\RemapTables\StatePSUTLookup.csv` - This lists all the possible water use values stored in the statewide USGS water use datasets and the PSUT cell coordinate (column/row pair) into which the value should go. As some water usage categories are inserted into more than one cell - some in as many as three - in the PSUT, the value mapping file contains three sets of cell coordinates (i.e. column/row pairs). Thus, we repeat the process of reading the data frame and mapping values to the PSUT three times. In cases where two or more usage categories map to the same PSUT cell, the values will summed in the scripts that process this table.
+
+### Discontinued IPython notebooks
+
+Included in this project workspace are IPython notebooks used to process USGS nationwide usage data, the Louisiana SWUDS data example, and the CMIP-5 Hydrologic data (for water supply). We discontinued these efforts on deciding that the USGS statewide water use data had the best thematic resolution across the country. These notebooks were discontinued in various states of coding and may not be as stable as the above efforts. Consult the README.md file for a listing of what each notebook does; additional documentation are in the notebooks themselves. 
 
