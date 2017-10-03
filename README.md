@@ -41,8 +41,8 @@ The IPython notebooks and the Python stand-alone scripts are redundant. The form
 
 IPython Notebooks show code along with formatted text in a readable and interactive document. The code (and text) are presented as blocks which can be viewed/run in a linear format. Thus, as mentioned above, the code does not lend itself to any sort of branching or looping, and therefore is best suited to demonstrate single examples of processing workflows, for example running one state's and one year's worth of data rather than looping through all states and all years. 
 
-* `Scripts/RetrieveStateUsageData.ipynb` ([link](http://nbviewer.jupyter.org/github/johnpfay/USWaterAccounting/blob/VersionFour/Scripts/RetrieveStateUsageData.ipynb))- This notebook downloads water use data for a user specified state (e.g., Louisiana) and year (e.g. 2010) from the National Water Information System server, and translates these data into physical supply and use table (PSUT), using a preformatted PSUT template and value mapping table. 
-* `Scripts/CompileStateUsageData.ipynb` ([link](http://nbviewer.jupyter.org/github/johnpfay/USWaterAccounting/blob/VersionFour/Scripts/CompileStateUsageData.ipynb)) - This notebook extracts data for all states for a given year and into a single CSV file. 
+* `Scripts/RetrieveStateUsageData.ipynb` ([link](http://nbviewer.jupyter.org/github/johnpfay/USWaterAccounting/blob/master/Scripts/RetrieveStateUsageData.ipynb))- This notebook downloads water use data for a user specified state (e.g., Louisiana) and year (e.g. 2010) from the National Water Information System server, and translates these data into physical supply and use table (PSUT), using a preformatted PSUT template and value mapping table. 
+* `Scripts/CompileStateUsageData.ipynb` ([link](http://nbviewer.jupyter.org/github/johnpfay/USWaterAccounting/blob/master/Scripts/CompileStateUsageData.ipynb)) - This notebook extracts data for all states for a given year and into a single CSV file. 
 
 ### Python Scripts
 
