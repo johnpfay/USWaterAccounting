@@ -9,7 +9,8 @@ John.Fay@Duke.edu
 '''
 
 #Import modules
-import os, urllib
+from __future__ import print_function
+import sys, os, urllib
 import pandas as pd
 from us import states
 
@@ -59,12 +60,13 @@ def getData(state_abbr,year=2010):
 
 #Get the data for the first state
 abbr = states.STATES_CONTINENTAL[0].abbr
+print("Processing {}".format(abbr),end=" ")
 dfAll = getData(abbr)
 
 #Loop through states
 for state in states.STATES_CONTINENTAL[1:]:
     abbr = state.abbr
-    print("Processing {}".format(abbr))
+    print("{}".format(abbr),end=" ")
     dfState = getData(abbr)
     dfAll = pd.merge(dfAll,dfState,how='inner',left_index='Group',right_index='Group')
 

@@ -1,7 +1,11 @@
 '''
 Create State PSUT Tables
 
-Downloads State Water Use data for 2000/2005/2010 and creates a formatted Physical Water Use Supply table.
+This script compiles 2000, 2005, and 2010 data for a given state
+into a set of three PSUT tables (one for each year). The state to
+process is set in line 26, and the output is stored as an Excel
+file in the Data/StateData folder as "xx_PSUTt.xlsx", where "xx"
+is the state abbreviation.
 
 Original data are from the USGS state water programs.
 
@@ -16,17 +20,19 @@ Workflow:
     State PSUT remap table
 
 -Package Requirements:
-    pandas, numpy, and openpyxl: All can be easily added using `pip`
+    pandas and openpyxl: Both can be easily installed using `pip install`
 
 September 2017
 John.Fay@Duke.edu
 '''
 
+#Specify the state and year to process
+state = 'or' 
+
 #Import modules
 import sys, os, urllib
 from shutil import copyfile
 import pandas as pd
-import numpy as np
 from openpyxl import load_workbook
 
 #Get the input filenames
@@ -36,11 +42,11 @@ remapFilename = '../Data/RemapTables/StatePSUTLookup.csv'
 #Get the remap table and load as a dataframe
 dfRemap = pd.read_csv(remapFilename,dtype='str',index_col="Index")
 
-#Specify the state and year to process
-state = 'ca' 
-
 #Set the output filename
-outFilename = '../Data/StateData/{0}_PSUT.xlsx'.format(state.upper())
+stateDataFolder = '../Data/StateData'
+if os.path.exists(stateDataFolder) == False:
+    os.mkdir(stateDataFolder)
+outFilename = stateDataFolder + os.sep + '{0}_PSUT.xlsx'.format(state.upper())
 
 #Copy the template to the output filename
 copyfile(src=templateFilename,dst=outFilename)
@@ -77,15 +83,17 @@ for year in (2000,2005,2010):
     dfTidy = dfTidy[dfTidy['Group'].str.contains('Mgal')].copy(deep=True)
 
     #Change the type of the MGal column to float 
-    dfTidy['MGal'] = dfTidy.MGal.astype(np.float)
+    dfTidy['MGal'] = dfTidy.MGal.astype('float')
 
     #Join the remap table
     print("...linking with remap table")
     dfAll = pd.merge(dfTidy,dfRemap,how='inner',left_on="Group",right_on="Group")
 
-    #Open the spreadsheet template
+    #Open the spreadsheet template; copy the template worksheet to a new worksheet
     wb = load_workbook(filename=outFilename)
-    ws = wb[str(year)]
+    template_ws = wb['template']
+    ws = wb.copy_worksheet(template_ws)
+    ws.title = str(year)
 
     #Loop through the three sets of row/columns and udpate values into the Excel spreadsheet
     print("...updating values in output Excel file")
@@ -101,6 +109,11 @@ for year in (2000,2005,2010):
             #Set the value in the workbook
             rv = str(row)+ str(column)
             ws[rv] = value
-        
+
     #Save the workbook
     wb.save(outFilename)
+
+#Remove the template worksheet and update the output
+wb.remove_sheet(wb.get_sheet_by_name('template'))
+wb.save(outFilename)
+
