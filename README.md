@@ -23,7 +23,7 @@ Once we decided on the datasets, we developed a set of Python scripts to pull ra
 
 After conversations with Michael Vardon, Julie Hass, and other environmental-economic accountants, we made initial attempts at a suitable format for the physical use-supply tables in which to present our data. We developed code to query and transform the database developed above into this format. 
 
-
+The current version of this tool requires: (1) a template of the desired output: a physical supply and use table (PSUT) in the form of an Excel worksheet, and (2) a value mapping table that cross references the state usage attributes to the proper cell in the PSUT table. Examples of both are provided as part of this tool. 
 
 ### Current status
 
@@ -31,16 +31,26 @@ The USGS and the accountants continue to discuss the best format of the accounti
 
 
 
+## Products
 
+All code is written in Python (version 2.7) and are available interactive Python (i.e, *IPython*) notebooks and as standalone Python scripts hosted on GitHub:<https://github.com/johnpfay/USWaterAccounting>. Each notebook/script is fully documented and requires no proprietary software. These products do, however,  require some 3rd party open-source packages to be installed prior to execution.
 
-## Deliverables
-
-All code is written in Python (version 2.7) and are available as standalone Python scripts and/or interactive Python (i.e, IPython) notebooks hosted on GitHub:<https://github.com/johnpfay/USWaterAccounting>. Each script/notebook is fully documented and requires no proprietary software. These scripts do, however,  require some 3rd party open-source packages to be installed prior to execution.
-
-The IPython notebooks and the Python stand-alone scripts are somewhat redundant. The former is useful for walking through the individual scripting workflows to better understand the logic of the process. These notebooks, however, are not well suited to iterating (e.g. over all states), and so for batch running the analysis for all dates and for all years, we've also provided stand-alone Python scripts. 
+The IPython notebooks and the Python stand-alone scripts are redundant. The former is useful for walking through the individual scripting workflows to better understand the logic of the process. These notebooks, however, are not well suited to iterating (e.g. over all states), and so for batch running the analysis for all dates and for all years, we've also provided stand-alone Python scripts. 
 
 ### IPython Notebooks
 
-IPython Notebooks provide 
+IPython Notebooks show code along with formatted text in a readable and interactive document. The code (and text) are presented as blocks which can be viewed/run in a linear format. Thus, as mentioned above, the code does not lend itself to any sort of branching or looping, and therefore is best suited to demonstrate single examples of processing workflows, for example running one state's and one year's worth of data rather than looping through all states and all years. 
 
-* `RetrieveStateUsageData.ipynb` - This notebook downloads water use data for a user specified state and year from the National Water Information System server, and translates these data into physical supply and use table (PSUT), using a preformatted PSUT template and value mapping table. 
+* `Scripts/RetrieveStateUsageData.ipynb` ([link](http://nbviewer.jupyter.org/github/johnpfay/USWaterAccounting/blob/VersionFour/Scripts/RetrieveStateUsageData.ipynb))- This notebook downloads water use data for a user specified state (e.g., Louisiana) and year (e.g. 2010) from the National Water Information System server, and translates these data into physical supply and use table (PSUT), using a preformatted PSUT template and value mapping table. 
+* `Scripts/CompileStateUsageData.ipynb` ([link](http://nbviewer.jupyter.org/github/johnpfay/USWaterAccounting/blob/VersionFour/Scripts/CompileStateUsageData.ipynb)) - This notebook extracts data for all states for a given year and into a single CSV file. 
+
+### Python Scripts
+
+* `Scripts/CreateStatePSUTTables.py` - This script compiles 2000, 2005, and 2010 data for a given state into a set of three PSUT tables (one for each year). The state to process is set in line 26, and the output is stored as an Excel file in the Data/StateData folder as `xx_PSUTt.xlsx`, where `xx` is the state abbreviation. As the above `RetrieveStateUsageData.ipynb` notebook, this script requires the PSUT template and value mapping files. 
+* `Scripts/CompileStateUsageData.py` - This script extracts data for all states for a given year and into a single CSV file. 
+
+### Supplemental Data Files
+
+* `Data\Templates\StatePSUT_Template.xlsx` - This is the templates used to create all the statewide PSUT tables. This table can be reformatted any way with the important caveat that the `StatePSUTLookup.csv` file also be updates so that data values get mapped onto the correct cells. 
+* `Data\RemapTables\StatePSUTLookup.csv` - This lists all the possible water use values stored in the statewide USGS water use datasets and the PSUT cell coordinate (column/row pair) into which the value should go. As some water usage categories are inserted into more than one cell - some in as many as three - in the PSUT, the value mapping file contains three sets of cell coordinates (i.e. column/row pairs). Thus, we repeat the process of reading the data frame and mapping values to the PSUT three times. In cases where two or more usage categories map to the same PSUT cell, the values will summed in the scripts that process this table.
+
