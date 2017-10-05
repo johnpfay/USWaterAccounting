@@ -16,6 +16,5 @@
 *.rtf	 diff=astextplain
 *.RTF	 diff=astextplain
 *.gz filter=lfs diff=lfs merge=lfs -text
-*.csv filter=lfs diff=lfs merge=lfs -text
 cb_2016_us*.* filter=lfs diff=lfs merge=lfs -text
 CountyHUC8.* filter=lfs diff=lfs merge=lfs -text
